@@ -143,7 +143,9 @@ def plan_journey(
     output = io.StringIO()
     with redirect_stdout(output):
         if strategy == 'min_transfer':
-            graph = get_dist_graph(city, ignore_dists=True)
+            # Follow CLI behavior: build full dist graph (with virtual/circle by default)
+            # and run shortest_path in "station" mode (ignore distances -> minimize station count).
+            graph = get_dist_graph(city, include_virtual=True, include_circle=True)
             path_dict = shortest_path(graph, start_station, ignore_dists=True)
 
             if end_station not in path_dict:
